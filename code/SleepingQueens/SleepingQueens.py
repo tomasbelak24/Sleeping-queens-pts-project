@@ -12,7 +12,7 @@ class SleepingQueens:
 
     # neskor metoda, dostane board position co bude zrejme int [0,11]
     def wakeQueen(self, position: int) -> Optional[Queen]:
-        if position > 11:
+        if position > 11 or position < 0:
             return
         awokenQueen: Queen = self._sleepingQueensBoard[position]
         if awokenQueen is None:
