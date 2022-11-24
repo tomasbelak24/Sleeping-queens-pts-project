@@ -12,6 +12,8 @@ class SleepingQueens:
 
     # neskor metoda, dostane board position co bude zrejme int [0,11]
     def wakeQueen(self, position: int) -> Optional[Queen]:
+        if position > 11:
+            return
         awokenQueen: Queen = self._sleepingQueensBoard[position]
         if awokenQueen is None:
             return
@@ -25,7 +27,7 @@ class SleepingQueens:
 
     # int za BoardPosition
     def getPositions(self) -> Set[int]:
-        return set([i for i, q in enumerate(self._sleepingQueensBoard) if q == None])
+        return set([i for i, q in enumerate(self._sleepingQueensBoard) if q != None])
 
 
 
