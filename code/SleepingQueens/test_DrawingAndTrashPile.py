@@ -26,10 +26,10 @@ class test_DrawingAndTrashPile(TestCase):
         hand.append(piles.discardAndDraw(toBeDiscarded))    
         self.assertEqual(1, len(piles._trashPile))
         self.assertEqual(toBeDiscarded, piles._trashPile)
-        self.assertEqual(toBeDiscarded, piles.cardsDiscardedThisTurn)
+        self.assertEqual(toBeDiscarded, piles.getCardsDiscardedThisTurn())
         self.assertEqual(5, len(hand))
         piles.newTurn()
-        self.assertEqual(0,len(piles.cardsDiscardedThisTurn))
+        self.assertEqual(0,len(piles.getCardsDiscardedThisTurn()))
     
     def test_DiscardingTwo(self):
         piles = DrawingAndTrashPile()
@@ -42,10 +42,10 @@ class test_DrawingAndTrashPile(TestCase):
             hand.append(c)
         self.assertEqual(2, len(piles._trashPile))
         self.assertEqual(toBeDiscarded, piles._trashPile)
-        self.assertEqual(toBeDiscarded, piles.cardsDiscardedThisTurn)
+        self.assertEqual(toBeDiscarded, piles.getCardsDiscardedThisTurn())
         self.assertEqual(5, len(hand))
         piles.newTurn()
-        self.assertEqual(0, len(piles.cardsDiscardedThisTurn))
+        self.assertEqual(0, len(piles.getCardsDiscardedThisTurn()))
 
     
 if __name__ == "__main__":
