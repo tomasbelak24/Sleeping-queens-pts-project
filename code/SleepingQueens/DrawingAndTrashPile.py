@@ -30,9 +30,20 @@ class DrawingAndTrashPile:
         for i in range(4):
             for j in range(1, 11,1):
                 arr.append(Card(CardType.NUMBER, j))
+    
 
+    def discardAndDraw(self, discard: List[Card]) -> List[Card]:
+        for card in discard:
+            self._trashPile.append(card)
+        numberOfDiscards: int = len(discard)
+        self.cardsDiscardedThisTurn: List[Card] = list(discard)
+        return [self._drawingPile.pop(0) for i in range(numberOfDiscards)]
+           
+    
+    def newTurn(self):
+        self.cardsDiscardedThisTurn.clear()
 
-
-a = DrawingAndTrashPile()
-print(a._drawingPile)
-print(a._trashPile)
+    
+    def getCardsDiscardedThisTurn(self) -> List[Card]:
+        return self.cardsDiscardedThisTurn
+        
