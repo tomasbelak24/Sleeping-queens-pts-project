@@ -13,6 +13,7 @@ class TestSleeping(TestCase):
     def test_wakeQueen(self):
         queenDeck = SleepingQueens()
         awokenQueen = queenDeck.wakeQueen(0)
+        self.assertEqual(awokenQueen.points,awokenQueen.getPoints())
         self.assertIsInstance(awokenQueen, Queen)
         self.assertIsInstance(awokenQueen.points, int)
         self.assertIsInstance(awokenQueen.name, str)
@@ -25,7 +26,7 @@ class TestSleeping(TestCase):
         queenDeck = SleepingQueens()
         q00 = queenDeck.wakeQueen(0)
         q06 = queenDeck.wakeQueen(6)
-        queenDeck.makeAsleep(q06)
+        queenDeck.makeAsleep(q00)
         self.assertIsInstance(queenDeck._sleepingQueensBoard[0], Queen)
         self.assertIsNone(queenDeck._sleepingQueensBoard[6])
         queenDeck.makeAsleep(q06)
