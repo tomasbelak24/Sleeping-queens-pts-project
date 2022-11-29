@@ -25,3 +25,5 @@ class Card:
     type: CardType
     value: int
 
+    def isAttacking(self) -> bool:
+        return self.type in (CardType.KING, CardType.KNIGHT, CardType.SLEEPING_POTION)
