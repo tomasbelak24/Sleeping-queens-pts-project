@@ -12,8 +12,8 @@ class EvaluateNumberedCards:
         if numOfCards == 2:
             return self.cards[0].value == self.cards[1].value
         else:
-            eq = sorted(self.cards, key = lambda x: x.value)
-            sum = 0
+            eq: List[Card] = sorted(self.cards, key = lambda x: x.value)
+            sum: int = 0
             for card in eq[:-1]:
                 sum += card.value
 
