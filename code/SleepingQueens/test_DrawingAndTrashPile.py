@@ -5,7 +5,7 @@ from Cards import Card, CardType
 class test_DrawingAndTrashPile(TestCase):
 
     def test_init(self):
-        piles = DrawingAndTrashPile()
+        piles = DrawingAndTrashPile(toBeShuffled=False)
         self.assertIsInstance(piles._drawingPile[0].type, CardType)
         self.assertEqual(len(piles._drawingPile), 62)
         self.assertEqual(len(piles._trashPile), 0)
@@ -46,7 +46,7 @@ class test_DrawingAndTrashPile(TestCase):
         self.assertEqual(5, len(hand))
         piles.newTurn()
         self.assertEqual(0, len(piles.getCardsDiscardedThisTurn()))
-
+        
     
 if __name__ == "__main__":
     main(verbosity=2)
