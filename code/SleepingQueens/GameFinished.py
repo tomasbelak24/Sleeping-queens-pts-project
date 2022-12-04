@@ -33,4 +33,5 @@ class GameFinished:
                     if sumOfPoints >= 40:
                         self.whoWon = playerIdx
                     return True
+        return False
 
