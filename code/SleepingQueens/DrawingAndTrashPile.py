@@ -1,14 +1,16 @@
 from random import shuffle
 from typing import List
 from Cards import Card, CardType
+from Game import Game
 
 class DrawingAndTrashPile:
     
-    def __init__(self) -> None:
+    def __init__(self, toBeShuffled: bool = False) -> None:
         self._trashPile: List[Card] = []
         self._drawingPile: List[Card] = []
         self.generateCards(self._drawingPile)
-        shuffle(self._drawingPile)
+        if toBeShuffled:
+            shuffle(self._drawingPile)
 
 
     def generateCards(self, arr: List[Card]) -> None:
@@ -46,4 +48,10 @@ class DrawingAndTrashPile:
     
     def getCardsDiscardedThisTurn(self) -> List[Card]:
         return self.cardsDiscardedThisTurn
+
+
+    def dealCardsToPlayers(self) -> None:
+        for playerIdx in Game.players.keys():
+            for handPos in range(5):
+                Game.players[playerIdx].playerHand[handPos] = Game.piles._drawingPile.pop(0)
         
