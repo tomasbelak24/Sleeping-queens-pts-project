@@ -1,7 +1,6 @@
 from random import shuffle
 from typing import List
 from Cards import Card, CardType
-from Game import Game
 
 class DrawingAndTrashPile:
     
@@ -49,9 +48,4 @@ class DrawingAndTrashPile:
     def getCardsDiscardedThisTurn(self) -> List[Card]:
         return self.cardsDiscardedThisTurn
 
-
-    def dealCardsToPlayers(self) -> None:
-        for playerIdx in Game.players.keys():
-            for handPos in range(5):
-                Game.players[playerIdx].playerHand[handPos] = Game.piles._drawingPile.pop(0)
         
