@@ -41,7 +41,7 @@ class Hand:
         return self._pickedCards
 
     
-    def hasCardOfType(self, type: CardType) -> HandPosition:
+    def hasCardOfType(self, type: CardType) -> Optional[HandPosition]:
         for pos in self._hand.keys():
             if self._hand[pos].type == type:
                 return pos
