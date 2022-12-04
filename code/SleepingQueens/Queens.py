@@ -17,6 +17,7 @@ class SleepingQueens(QueenCollection):
 
         for i, queen in enumerate(allQueens):
             self._sleepingQueens.addQueen(SleepingQueenPosition(i), queen)
+    
 
 class AwokenQueens(QueenCollection):
     def __init__(self) -> None:
