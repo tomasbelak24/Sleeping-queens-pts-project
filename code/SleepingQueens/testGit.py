@@ -5,3 +5,5 @@ if __name__ == "__main__":
 
     print("test staging changes by line")
     print("test staging changes by line")
+
+    print("test remote repo")
