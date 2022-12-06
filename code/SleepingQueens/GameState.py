@@ -12,3 +12,6 @@ class GameState:
     awokenQueens: Dict[AwokenQueenPostion, Queen]
     cards: Dict[HandPosition, Optional[Card]]
     cardsDiscardedLastTurn: List[Card]
+
+    def getNumberOfPlayers(self):
+        return self.numberOfPlayers

@@ -3,14 +3,14 @@ from Player import Player
 
 class GameObservable:
 
-    def addPlayer(playerIdx: int) -> None:
+    def addPlayer(playerIdx: int, game: Game) -> None:
         if playerIdx not in range(1,6):
             raise "Invalid player index"
         
         if playerIdx - max(Game.players.keys()) != 1:
             raise "Invalid player index"
 
-        Game.players[playerIdx] = Player()
+        Game.players[playerIdx] = Player(game)
     
     
     def getNumOfPlayers(self) -> int:
