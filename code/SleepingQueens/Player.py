@@ -1,33 +1,38 @@
-from DataType_Positions import HandPosition
 from Hand import Hand
-from Game import Game
-from typing import List, Position, Dict
+from typing import List, Dict, Any
 from EvaluateAttack import EvaluateAttack
 from EvaluateNumberedCards import EvaluateNumberedCards
-from Cards import CardType, Card, Queen
-from GameState import GameState
+from Cards import CardType, Card
 from Queens import AwokenQueens
+from GameState import GameState
+from MoveQueen import MoveQueen
+from Game import Game
 
 class Player:
 
-    def __init__(self) -> None:
+    def __init__(self, game: Game) -> None:
         self.playerHand: Hand = Hand(GameState.numberOfPlayers)
-        self.awokenQueens: Dict[int, Queen] = AwokenQueens()
+        self.awokenQueens: AwokenQueens = AwokenQueens()
+        self.game = game
 
     
-    def play(self, cardPositions: List[Position], targetQueen: Position = -1, targetPlayerIdx: int = -1) -> None:
+    def play(self, cardPositions: List[Any], targetQueen: Any = -1, targetPlayerIdx: int = -1) -> None:
         numberOfCards: int = len(cardPositions)
         cards: List[Card] = [self.playerHand._hand[pos] for pos in cardPositions]
 
         if numberOfCards == 1 and cards[0].isAttacking():
-            # playing attacking card
-            # evaluate attack
             typeOfCard: CardType = cards[0].type
-            eA: EvaluateAttack = EvaluateAttack(typeOfCard)
-            check: bool = eA.play(self.playerHand.playerIdx,targetQueen, targetPlayerIdx)
-            if check:
-                self.playerHand.pickCards(cardPositions)
-                self.playerHand.removePickedCardsAndRedraw(self.playerHand.returnPickedCards())
+            eA: EvaluateAttack = EvaluateAttack(self.playerHand.playerIdx,typeOfCard, self.game)
+            attackWasSuccess: bool = eA.play(targetQueen, targetPlayerIdx)
+            if attackWasSuccess and typeOfCard == CardType.KING:
+                # ak to nebol kral tak sa to vyhodnoti v EvaluateAttack a cez moveQueen sa mu pripise Q
+                # ak bol attack uspesny a bol to kral tak presun kralovien spravim tu
+                movingFromSleepingToAwoken: bool = MoveQueen.playKing(targetQueen, self)
+                if not movingFromSleepingToAwoken:
+                    raise "pri presuvani kralovny niekde nastala chyba"
+                
+            self.playerHand.pickCards(cardPositions)
+            self.playerHand.removePickedCardsAndRedraw(self.playerHand.returnPickedCards())
                 
         elif numberOfCards == 1 and not cards[0].isAttacking():
             raise "Player is not allowed to play a non-attacking card during his turn"
