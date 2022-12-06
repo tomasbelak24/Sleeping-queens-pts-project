@@ -49,14 +49,3 @@ class Hand:
 
     def getCards(self) -> List[Card]:
         return list(self._hand.values())
-
-""" dp = DrawingAndTrashPile()
-hand = Hand(1, dp)
-cards = []
-for i in range(1, 6):
-    card = Card(CardType.NUMBER, i)
-    hand._hand[i] = card
-    cards.append(card)
-
-pickedCards = hand.pickCards([1, 2, 3])
-hand.removePickedCardsAndRedraw() """
