@@ -46,6 +46,39 @@ class test_DrawingAndTrashPile(TestCase):
         self.assertEqual(5, len(hand))
         piles.newTurn()
         self.assertEqual(0, len(piles.getCardsDiscardedThisTurn()))
+    
+    def test_drawingFromEmpty(self):
+        piles = DrawingAndTrashPile()
+        hand = [piles._drawingPile.pop(0) for i in range(5)]
+        toBeDiscarded = [hand.pop(0), hand.pop(0)]
+        piles._trashPile = list(piles._drawingPile)
+        piles._drawingPile.clear()
+        self.assertEqual(0, len(piles._drawingPile))
+        drawn = piles.discardAndDraw(toBeDiscarded)
+        for c in drawn:
+            hand.append(c)
+        self.assertEqual(5, len(hand))
+        self.assertEqual(57, len(piles._drawingPile))
+        self.assertEqual(0, len(piles._trashPile))
+    
+    def test_drawingOtherMethod(self):
+        piles = DrawingAndTrashPile(otherReloadMethod=True)
+        hand = [piles._drawingPile.pop(0) for i in range(5)]
+        toBeDiscarded = [hand.pop(0), hand.pop(0)]
+        piles._trashPile = list(piles._drawingPile) 
+        piles._drawingPile.clear()
+        piles._drawingPile.append(piles._trashPile.pop(0))
+        self.assertEqual(1, len(piles._drawingPile))
+        drawn = piles.discardAndDraw(toBeDiscarded)
+        for c in drawn:
+            hand.append(c)
+        self.assertEqual(5, len(hand))
+        self.assertEqual(57, len(piles._drawingPile))
+        self.assertEqual(0, len(piles._trashPile))
+
+
+
+
         
     
 if __name__ == "__main__":
