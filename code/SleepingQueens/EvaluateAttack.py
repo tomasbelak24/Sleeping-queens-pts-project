@@ -1,16 +1,16 @@
 from Cards import CardType
 from Hand import Hand
-from Game import Game
 from DataType_Positions import HandPosition
 from typing import Any
 from MoveQueen import MoveQueen
+from interfaces import EvaluateAttackInterface, GameInterface, PlayerInterface
 
-class EvaluateAttack:
+class EvaluateAttack(EvaluateAttackInterface):
     
-    def __init__(self, playerIdx: int,cardType: CardType, game: Game) -> None:
+    def __init__(self, player: PlayerInterface,cardType: CardType, game: GameInterface) -> None:
         self.attackingCardType: CardType = cardType
-        self.playerIdx: int = playerIdx
-        self.game = game
+        self.player: PlayerInterface = player
+        self.game: GameInterface = game
         
         if cardType == CardType.KING:
            self.defenseCardType = None
@@ -23,9 +23,11 @@ class EvaluateAttack:
         
     
     def play(self, targetQueen: Any = -1, targetPlayerIdx: int = -1) -> bool:
+        check: bool = False
         if self.attackingCardType == CardType.KING:
             if self.game.sleepingQueens.getQueens().keys() and targetQueen in range(12):
-                return True
+                check = MoveQueen.playKing(targetQueen, self.player)
+            return check
         
 
         if self.attackingCardType == CardType.KNIGHT:
@@ -34,11 +36,11 @@ class EvaluateAttack:
                 self.defenseCardType)
             if defenseCardIndex is not None:
                 targetPlayerHand.pickCards(
-                    targetPlayerHand._hand[defenseCardIndex])
+                    [defenseCardIndex])
                 targetPlayerHand.removePickedCardsAndRedraw()
                 return False
             
-            check: bool = MoveQueen.playKnight(targetQueen, targetPlayerIdx)
+            check: bool = MoveQueen.playKnight(targetQueen, targetPlayerIdx, self.player)
             return check
                 
         
@@ -48,9 +50,9 @@ class EvaluateAttack:
                 self.defenseCardType)
             if defenseCardIndex is not None:
                 targetPlayerHand.pickCards(
-                    targetPlayerHand._hand[defenseCardIndex])
+                    [defenseCardIndex])
                 targetPlayerHand.removePickedCardsAndRedraw()
                 return False
 
-            check: bool = MoveQueen.playSleepingPotion(targetQueen, targetPlayerIdx)
+            check: bool = MoveQueen.playSleepingPotion(targetQueen, targetPlayerIdx, self.player)
             return check
