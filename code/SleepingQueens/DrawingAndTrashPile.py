@@ -1,16 +1,19 @@
 from random import shuffle
 from typing import List
 from Cards import Card, CardType
+from DrawingPileMethods import DrawingPileMethod
+from interfaces import DrawingAndTrashPileInterface
 
-class DrawingAndTrashPile:
+class DrawingAndTrashPile(DrawingAndTrashPileInterface):
     
-    def __init__(self, toBeShuffled: bool = False, otherReloadMethod: bool = False) -> None:
-        self._trashPile: List[Card] = []
-        self._drawingPile: List[Card] = []
-        self.generateCards(self._drawingPile)
-        self.otherReloadMethod: bool = otherReloadMethod
+    def __init__(self, toBeShuffled: bool = False, reloadMethod: DrawingPileMethod = DrawingPileMethod.drawingPileMethod1) -> None:
+        super().__init__(toBeShuffled, reloadMethod)
+        self.trashPile: List[Card] = []
+        self.drawingPile: List[Card] = []
+        self.generateCards(self.drawingPile)
+        self.reloadMethod: DrawingPileMethod = reloadMethod
         if toBeShuffled:
-            shuffle(self._drawingPile)
+            shuffle(self.drawingPile)
 
 
     def generateCards(self, arr: List[Card]) -> None:
@@ -36,32 +39,14 @@ class DrawingAndTrashPile:
 
     def discardAndDraw(self, discard: List[Card]) -> List[Card]:
         for card in discard:
-            self._trashPile.append(card)
+            self.trashPile.append(card)
         numberOfDiscards: int = len(discard)
         self.cardsDiscardedThisTurn: List[Card] = list(discard)
         newCards = []
-        if not self.otherReloadMethod:
-            for i in range(numberOfDiscards):
-                try:
-                    card = self._drawingPile.pop(0)
-                except IndexError:
-                    self._drawingPile = list(self._trashPile[::-1])
-                    shuffle(self._drawingPile)
-                    self._trashPile.clear()
-                    card = self._drawingPile.pop(0)
-                newCards.append(card)
-        else:
-            leftInDrawing: int = len(self._drawingPile)
-            if leftInDrawing <= numberOfDiscards:
-                shuffle(self._trashPile)
-                temp: List[Card] = list(self._drawingPile)
-                self._drawingPile = list(self._trashPile)
-                self._trashPile.clear()
-                for card in temp:
-                    self._drawingPile.append(card)
-            for i in range(numberOfDiscards):
-                newCards.append(self._drawingPile.pop(0))
-    
+        try:
+            self.drawingPile, self.trashPile, newCards = self.reloadMethod(numberOfDiscards, dP = self.drawingPile, tP=self.trashPile)
+        except Exception as e:
+                    print("Doslo ku chybe pri drawingPileMetode", e)
         return newCards
            
     
