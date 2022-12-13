@@ -1,14 +1,15 @@
 from unittest import TestCase, main, skip, SkipTest
 from DrawingAndTrashPile import DrawingAndTrashPile
 from Cards import Card, CardType
+from DrawingPileMethods import DrawingPileMethod
 
 class test_DrawingAndTrashPile(TestCase):
 
     def test_init(self):
         piles = DrawingAndTrashPile(toBeShuffled=False)
-        self.assertIsInstance(piles._drawingPile[0].type, CardType)
-        self.assertEqual(len(piles._drawingPile), 62)
-        self.assertEqual(len(piles._trashPile), 0)
+        self.assertIsInstance(piles.drawingPile[0].type, CardType)
+        self.assertEqual(len(piles.drawingPile), 62)
+        self.assertEqual(len(piles.trashPile), 0)
         
 
     def test_cardGeneration(self):
@@ -24,8 +25,8 @@ class test_DrawingAndTrashPile(TestCase):
         hand = cards[:5]
         toBeDiscarded = [hand.pop(0)]
         hand.append(piles.discardAndDraw(toBeDiscarded))    
-        self.assertEqual(1, len(piles._trashPile))
-        self.assertEqual(toBeDiscarded, piles._trashPile)
+        self.assertEqual(1, len(piles.trashPile))
+        self.assertEqual(toBeDiscarded, piles.trashPile)
         self.assertEqual(toBeDiscarded, piles.getCardsDiscardedThisTurn())
         self.assertEqual(5, len(hand))
         piles.newTurn()
@@ -40,8 +41,8 @@ class test_DrawingAndTrashPile(TestCase):
         drawn = piles.discardAndDraw(toBeDiscarded)
         for c in drawn:
             hand.append(c)
-        self.assertEqual(2, len(piles._trashPile))
-        self.assertEqual(toBeDiscarded, piles._trashPile)
+        self.assertEqual(2, len(piles.trashPile))
+        self.assertEqual(toBeDiscarded, piles.trashPile)
         self.assertEqual(toBeDiscarded, piles.getCardsDiscardedThisTurn())
         self.assertEqual(5, len(hand))
         piles.newTurn()
@@ -49,38 +50,35 @@ class test_DrawingAndTrashPile(TestCase):
     
     def test_drawingFromEmpty(self):
         piles = DrawingAndTrashPile()
-        hand = [piles._drawingPile.pop(0) for i in range(5)]
+        hand = [piles.drawingPile.pop(0) for i in range(5)]
         toBeDiscarded = [hand.pop(0), hand.pop(0)]
-        piles._trashPile = list(piles._drawingPile)
-        piles._drawingPile.clear()
-        self.assertEqual(0, len(piles._drawingPile))
+        piles.trashPile = list(piles.drawingPile)
+        piles.drawingPile.clear()
+        self.assertEqual(0, len(piles.drawingPile))
         drawn = piles.discardAndDraw(toBeDiscarded)
         for c in drawn:
             hand.append(c)
         self.assertEqual(5, len(hand))
-        self.assertEqual(57, len(piles._drawingPile))
-        self.assertEqual(0, len(piles._trashPile))
+        self.assertEqual(57, len(piles.drawingPile))
+        self.assertEqual(0, len(piles.trashPile))
     
     def test_drawingOtherMethod(self):
-        piles = DrawingAndTrashPile(otherReloadMethod=True)
-        hand = [piles._drawingPile.pop(0) for i in range(5)]
+        piles = DrawingAndTrashPile(
+            toBeShuffled=False, reloadMethod=DrawingPileMethod.drawingPileMethod2)
+        hand = [piles.drawingPile.pop(0) for i in range(5)]
         toBeDiscarded = [hand.pop(0), hand.pop(0)]
-        piles._trashPile = list(piles._drawingPile) 
-        piles._drawingPile.clear()
-        piles._drawingPile.append(piles._trashPile.pop(0))
-        self.assertEqual(1, len(piles._drawingPile))
+        piles.trashPile = list(piles.drawingPile) 
+        piles.drawingPile.clear()
+        piles.drawingPile.append(piles.trashPile.pop(0))
+        self.assertEqual(1, len(piles.drawingPile))
         drawn = piles.discardAndDraw(toBeDiscarded)
         for c in drawn:
             hand.append(c)
         self.assertEqual(5, len(hand))
-        self.assertEqual(57, len(piles._drawingPile))
-        self.assertEqual(0, len(piles._trashPile))
+        self.assertEqual(57, len(piles.drawingPile))
+        self.assertEqual(0, len(piles.trashPile))
 
 
-
-
-        
-    
 if __name__ == "__main__":
     main(verbosity=2)
 

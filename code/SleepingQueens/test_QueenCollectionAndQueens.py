@@ -7,24 +7,24 @@ class testQueenCollection(TestCase):
     
     def test_init(self):
         qC = QueenCollection()
-        qC.addQueen(1, Queen(24, "Ingrid"))
-        self.assertEqual("Ingrid", qC.collection[1].name)
-        self.assertEqual(24, qC.collection[1].points)
+        qC.addQueen(Queen(24, "Ingrid"))
+        self.assertEqual("Ingrid", qC.collection[0].name)
+        self.assertEqual(24, qC.collection[0].points)
     
     def test_removal(self):
         qC = QueenCollection()
         q: Queen = Queen(24, "Ingrid")
-        qC.addQueen(1, q)
-        self.assertEqual("Ingrid", qC.collection[1].name)
-        self.assertEqual(24, qC.collection[1].points)
-        self.assertEqual(q, qC.removeQueen(1))
+        qC.addQueen(q)
+        self.assertEqual("Ingrid", qC.collection[0].name)
+        self.assertEqual(24, qC.collection[0].points)
+        self.assertEqual(q, qC.removeQueen(0))
         self.assertEqual(0, len(qC.getQueens().keys()))
 
     def test_wrongRemoval(self):
         qC = QueenCollection()
-        qC.addQueen(1, Queen(24, "Ingrid"))
-        self.assertEqual("Ingrid", qC.collection[1].name)
-        self.assertEqual(24, qC.collection[1].points)
+        qC.addQueen(Queen(24, "Ingrid"))
+        self.assertEqual("Ingrid", qC.collection[0].name)
+        self.assertEqual(24, qC.collection[0].points)
         self.assertIsNone(qC.removeQueen(2))
         self.assertEqual(1, len(qC.getQueens().keys()))
 
