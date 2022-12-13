@@ -1,5 +1,4 @@
-from Game import Game
-from Player import Player
+from interfaces import GameInterface
 from GameState import GameState
 from typing import List
 
@@ -7,9 +6,9 @@ class GameFinished:
 
     whoWon: int
     
-    def isFinished(self) -> bool :
-        for playerIdx in Game.players.keys():
-            player = Game.players[playerIdx]
+    def isFinished(self, game: GameInterface) -> bool :
+        for playerIdx in game.players.keys():
+            player = game.players[playerIdx]
             aQueens = player.awokenQueens.values()
             if GameState.numberOfPlayers in [2,3]:
                 if len(aQueens) == 5:

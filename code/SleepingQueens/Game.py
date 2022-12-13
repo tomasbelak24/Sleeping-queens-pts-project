@@ -1,42 +1,43 @@
 from Player import Player
 from DrawingAndTrashPile import DrawingAndTrashPile
 from typing import List, Dict, Optional, Any
-from GameObservable import GameObservable
 from Queens import SleepingQueens, AwokenQueens
 from GameFinished import GameFinished
 from GameState import GameState
 from GameAdaptor import GameAdaptor
+from interfaces import GameInterface
+from Hand import Hand
+from DrawingPileMethods import DrawingPileMethod
 
-class Game:
-    players: Dict[int, Player]
+class Game(GameFinished, GameAdaptor, GameInterface):
+    players: Dict[int, Player] = dict()
     currentTurn: int
     _turnOrder: List[int]
     piles: DrawingAndTrashPile
     sleepingQueens: SleepingQueens
     #awokenQueens: AwokenQueens
-    otherDiscardPileMethod: bool
 
-    def __init__(self, numOfPlayers: int,otherDiscardPileMethod: bool = False) -> None:
-        for i in range(1, numOfPlayers + 1):
-            GameObservable.addPlayer(i)
-        self.otherDiscardPileMethod = otherDiscardPileMethod
-        GameState.numberOfPlayers = numOfPlayers
-        self.piles = DrawingAndTrashPile(self.otherDiscardPileMethod)
-        self.sleepingQueens = SleepingQueens(shuffle=False)
+    def __init__(self, numOfPlayers: int,discardPileMethod: DrawingPileMethod = DrawingPileMethod.drawingPileMethod1) -> None:
+        self.piles = DrawingAndTrashPile(False, discardPileMethod)
+        for i in range(numOfPlayers):
+            self.addPlayer(i)
+        self.discardPileMethod = discardPileMethod
+        self.numberOfPlayers = numOfPlayers
+        self.sleepingQueens = SleepingQueens()
         self.awokenQueens = AwokenQueens()
-        turnOrder: List[int] = [range(1, numOfPlayers + 1)]
+        turnOrder: List[int] = [range(numOfPlayers)]
         
     def game(self):
 
         self.dealCardsToPlayers()
         
-        while not GameFinished.isFinished():
-            self.currentTurn = self.getTurn()
-            command = GameAdaptor.getGameArguments()
+        while not self.isFinished():
+            self.currentTurn: int = self.getTurn()
+            command: List = self.getGameArguments()
             gS: GameState = self.play(self.currentTurn, command[0], command[1], command[2])
             print(gS)
 
-        print(f'Player {GameFinished.whoWon} won the Game ! Congrats!')
+        print(f'Player {self.whoWon} won the Game ! Congrats!')
         return
     
     def play(self, playerIdx: int, cards: List[Any], targetQueen: Any, targetPlayerIdx: int) -> Optional[GameState]:
@@ -51,5 +52,17 @@ class Game:
     def dealCardsToPlayers(self) -> None:
         for playerIdx in self.players.keys():
             for handPos in range(5):
-                self.players[playerIdx].playerHand[handPos] = self.piles._drawingPile.pop(
-                    0)
+                self.players[playerIdx].playerHand._hand[handPos] = self.piles.drawingPile.pop(0)
+
+
+    def addPlayer(self, playerIdx: int) -> None:
+        if playerIdx not in range(5):
+            raise "Invalid player index"
+
+        try:
+            if playerIdx - max(self.players.keys()) != 1:
+                raise "Invalid player index"
+        except:
+            pass
+
+        self.players[playerIdx] = Player(game = self, playerHand = Hand(playerIdx, drawing = self.piles))

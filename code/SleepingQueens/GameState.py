@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import List, Set, Dict, Optional
-from SleepingQueens import SleepingQueens
+from Queens import SleepingQueens
 from DataType_Positions import SleepingQueenPosition, HandPosition, AwokenQueenPostion
 from Cards import Card, Queen
 
