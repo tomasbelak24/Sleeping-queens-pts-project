@@ -1,8 +1,9 @@
 from Cards import Card
 from typing import List
+from interfaces import EvaluateNumberedCardsInterface
 
 
-class EvaluateNumberedCards:
+class EvaluateNumberedCards(EvaluateNumberedCardsInterface):
 
     def play(self, cards: List[Card]) -> bool:
         numOfCards: int = len(cards)
