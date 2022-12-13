@@ -1,14 +1,18 @@
 from Cards import Queen
 from DataType_Positions import SleepingQueenPosition, AwokenQueenPostion
 from typing import Dict, Any, Optional, List
+#from interfaces import QueenCollectionInterface
 
-class QueenCollection:
+class QueenCollection():
 
     def __init__(self) -> None:
         self.collection: Dict[Any, Queen] = dict()
 
     def addQueen(self, queen: Queen):
-        maxKey = max(self.collection.keys()) + 1
+        try:
+            maxKey = max(self.collection.keys()) + 1
+        except ValueError:
+            maxKey = 0
         self.collection[maxKey] = queen
         self.indexRefresh()
 

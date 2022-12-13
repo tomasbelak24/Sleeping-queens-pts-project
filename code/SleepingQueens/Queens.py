@@ -14,7 +14,7 @@ class SleepingQueens(QueenCollection):
             shuffle(allQueens)
 
         for i, queen in enumerate(allQueens):
-            self.addQueen(i, queen)
+            self.addQueen(queen)
     
 class AwokenQueens(QueenCollection):
     
