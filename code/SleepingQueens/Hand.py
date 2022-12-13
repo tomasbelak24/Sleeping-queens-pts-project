@@ -1,13 +1,13 @@
 from typing import List, Optional, Dict
 from Cards import Card, CardType
-from DrawingAndTrashPile import DrawingAndTrashPile
+from interfaces import HandInterface, DrawingAndTrashPileInterface
 
-class Hand:
+class Hand(HandInterface):
     
-    def __init__(self, playerIdx, drawing: DrawingAndTrashPile) -> None:
+    def __init__(self, playerIdx, drawing: DrawingAndTrashPileInterface) -> None:
         self.playerIdx: int = playerIdx
         self._hand: Dict[int, Card] = dict()
-        self.drawing: DrawingAndTrashPile = drawing
+        self.drawing: DrawingAndTrashPileInterface = drawing
     
     
     def pickCards(self, positions: List[int]) -> Optional[List[Card]]:
